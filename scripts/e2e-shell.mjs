@@ -8,7 +8,7 @@ await p.goto(B + "/app"); await p.waitForURL(/\/app$/); await p.getByRole("headi
 // Home quick create
 await p.getByLabel("Enter your destination URL").fill("https://example.com/launch?x=1"); await p.getByRole("button", { name: "Create your link" }).click(); await p.getByTestId("fresh").waitFor(); assert.match(await p.getByTestId("fresh-url").innerText(), /\/bitlyisdead\/s\/[A-Za-z0-9]{6}$/);
 // Create-link page with title, back-half and tags → lands on details
-await p.getByRole("link", { name: "Create new" }).click(); await p.waitForURL(/\/app\/links\/new/);
+const cn = p.getByRole("button", { name: "Create new" }); if (await cn.count()) { await cn.click(); await p.getByRole("menuitem", { name: "Link" }).click(); } else await p.getByRole("link", { name: "Create new" }).click(); await p.waitForURL(/\/app\/links\/new/);
 await p.getByLabel("Destination").fill("example.com/docs"); await p.getByLabel(/^Title/).fill("Docs page"); await p.getByLabel(/Custom back-half/).fill(BH);
 const tags = p.getByLabel(/^Tags/); await tags.fill("docs"); await tags.press("Enter"); await tags.fill("guide"); await tags.press("Enter"); assert.equal(await p.locator(".tg-chip").count(), 2);
 await p.getByRole("button", { name: "Create your link" }).click(); await p.waitForURL(new RegExp("/app/l/" + BH)); await p.getByTestId("total-clicks").waitFor();
