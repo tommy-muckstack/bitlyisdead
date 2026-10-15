@@ -10,8 +10,6 @@ export const pricingCfg: PBCfg = {
   ],
   extra: { title: "Custom Pricing", text: "Custom number of links, QR Codes, and landing pages.", cta: "Get Quote", bullets: ["Customized onboarding", "Dedicated customer success", "99.99% uptime", "SSO"] },
   tableTitle: "Detailed Feature Comparison", cols: ["Free", "Core", "Growth", "Premium"],
-  groups: [["Links", ["Short links", "Custom back-halves", "Link redirects", "Bulk creation", "UTM builder"]], ["QR Codes", ["Dynamic QR Codes", "Custom colors and logos", "Scan analytics"]]],
-  faqTitle: "Frequently asked questions", faqs: [["Is Bitly free?", "This open-source version is free."], ["Do links expire?", "Links never expire unless you delete them."]],
-  fill: 8,
-  fillMobile: 0,
+  groups: [["Links", ["Shorten any link", "Custom back-half", "Link title", "Link expiry date", "Turn a link on or off", "Delete a link", "-Link redirects", "-Bulk link creation", "-UTM builder", "-Branded domains"]], ["Analytics", ["Total clicks per link", "Details page for each link", "Search your links", "-Click history by day", "-Geo and device breakdown", "-Referrer reports"]], ["QR Codes", ["-Dynamic QR Codes", "-QR Code customization", "-Scan analytics"]], ["Account", ["Sign in with email or Google", "Demo account", "Self-hosting and open source code", "-Teams and roles", "-SSO", "-Priority support"]]],
+  faqTitle: "Frequently asked questions", faqs: [["Is Bitly free?", "This project is free and open source. The plans mirror the original’s structure."], ["Do links expire?", "Only if you set an expiry date when you create the link."], ["Can I edit where a short link goes?", "Changing the destination is not built yet. You can turn the link off and create a new one."], ["Do you support QR Codes?", "QR Codes are not built yet and are marked unavailable in the table."], ["Can I use my own domain?", "Custom domains are not built yet. Short links use the domain the app is hosted on."]],
 };
