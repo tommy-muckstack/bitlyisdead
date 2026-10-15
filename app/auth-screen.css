@@ -22,6 +22,6 @@
 .bz-right{position:relative;background:#f6f3ec;overflow:hidden}
 .bz-svg{position:absolute;inset:0;width:100%;height:100%}
 .bz-cap{position:absolute;left:0;right:0;top:674px;margin:0 auto;width:640px;max-width:90%;text-align:center;font-size:29px;line-height:41px;font-weight:700;color:#273144}
-@media (max-width:860px){.bz-au{grid-template-columns:1fr}.bz-right{display:none}.bz-logo{left:20px}.bz-form{padding-top:110px}}
+@media (max-width:860px){.bz-au{grid-template-columns:minmax(0,1fr)}.bz-left{min-width:0}.bz-right{display:none}.bz-logo{left:20px}.bz-form{width:auto;max-width:none;margin:0 20px;padding-top:110px}}
 
 .bz-right.su .bz-cap{top:658px}
