@@ -1,0 +1,35 @@
+import type { Site } from "@/lib/site-types";
+const GH = "https://github.com/tommy-muckstack/bitlyisdead";
+export const site: Site = {
+  slug: "bitlyisdead", name: "BitlyIsDead", replaces: "Bitly", theme: "bitly",
+  glyph: "M9 15 L15 9 M8 11 L6.5 12.5 A3 3 0 0 0 11.5 17.5 L13 16 M16 13 L17.5 11.5 A3 3 0 0 0 12.5 6.5 L11 8",
+  nav: [{ label: "Platform", id: "links" }, { label: "Solutions", id: "solutions" }, { label: "Resources", id: "resources" }, { label: "Pricing", id: "pricing" }],
+  cta: "Get started free",
+  hero: { variant: "split", eyebrow: "Free · Open source · No link limits", title: ["Short links.", "Real numbers."], subtitle: "Turn long, ugly URLs into short links you can share anywhere. Pick your own back-half, set an expiry, and see every click by day, source, device and browser. Free, with no monthly link cap.",
+    primary: { label: "Get your link", href: "/login" }, secondary: { label: "See pricing", href: "/#pricing" }, shot: "links.png", shotAlt: "A list of short links with click counts, copy buttons and a Shorten box on top",
+    claim: { prefix: "", placeholder: "Paste a long link here", cta: "Get your link" } },
+  audience: "Made for newsletters, social posts, print flyers, support teams, event organizers and anyone tired of 300-character URLs",
+  stepsTitle: "From long link to shared in four steps",
+  steps: [{ t: "Paste your link", d: "Any web address. We check it first and refuse anything that isn't a public http or https link." }, { t: "Make it yours", d: "Keep the random code, or choose a custom back-half like /s/spring-sale. Add a title and an expiry date." }, { t: "Share it", d: "Copy the short link or download a QR code as PNG or SVG." }, { t: "Watch the clicks", d: "Daily clicks, top referrers, devices and browsers update as people visit. Bots are filtered out." }],
+  rows: [
+    { id: "links", k: "Links", h: "Create, rename, pause and delete in one list", p: "Every link shows its short address, destination and click count. Search the list, copy with one click, turn a link off without deleting it, or change where it points.", img: "links.png", alt: "The links list with a search box and per-link actions", cta: "Shorten a link" },
+    { id: "analytics", k: "Analytics", h: "See where your clicks come from", p: "A 30-day chart plus breakdowns by referrer, device and browser for every link. Crawlers and link-preview bots are counted separately so they never inflate your numbers.", img: "details.png", alt: "A link's details page with a 30-day chart and referrer, device and browser breakdowns", cta: "See analytics" },
+    { id: "qr", k: "QR codes", h: "A QR code for every link, free", p: "Each short link has a scannable QR code you can download as a PNG for print or an SVG for design tools. Change the destination later and the code keeps working.", img: "qr.png", alt: "A short link's QR code with PNG and SVG download buttons", cta: "Get a QR code" },
+    { id: "control", k: "Control", h: "Links that end when you say so", p: "Set an expiry date, turn a link off any time, or edit the destination without changing the short address. Visitors to an ended link see a clear message, not a broken page.", img: "edit.png", alt: "The edit panel with destination, title and expiry fields", cta: "Take control" },
+  ],
+  statsTitle: "Real numbers, no fine print",
+  stats: [{ b: "$0", s: "per month, forever" }, { b: "300 links", s: "per account, with no monthly cap" }, { b: "30 days", s: "of daily click history" }, { b: "Apache-2.0", s: "fork it, change it, ship it" }],
+  integrations: { title: "Works anywhere a link does", text: "Email, social posts, text messages, slides, posters and packaging. Short links redirect with a standard 307, so every browser and app follows them." },
+  pricing: { title: "What you'd pay to shorten links elsewhere", vendor: "Bitly", asOf: "October 2026", plans: [{ name: "Core", perSeatMonth: 10, flat: true, note: "billed yearly, 100 links a month" }, { name: "Growth", perSeatMonth: 29, flat: true, note: "billed yearly, 500 links a month" }, { name: "Premium", perSeatMonth: 199, flat: true, note: "billed yearly, 3,000 links a month" }], seats: 1,
+    footnote: "Bitly's free plan allows 5 short links and 2 QR codes a month. Our version doesn't support custom domains, bulk creation, UTM building or deep links yet, so compare features, not just price.", featuresTitle: "Every feature, no plan gates",
+    features: [{ name: "More than 5 links a month", plan: "Core" }, { name: "Click analytics", plan: "Core" }, { name: "Custom back-halves", plan: "Free" }, { name: "QR codes", plan: "Free / Core" }, { name: "Link redirects (change the destination)", plan: "Core" }, { name: "Device and referrer breakdown", plan: "Premium" }] },
+  finalCta: { title: "Short links. Zero subscription.", sub: "Paste a link and your short address is ready in a second." },
+  footer: [
+    { title: "Product", links: [{ label: "Links", href: "/#links" }, { label: "Analytics", href: "/#analytics" }, { label: "QR codes", href: "/#qr" }, { label: "Pricing", href: "/#pricing" }] },
+    { title: "Get started", links: [{ label: "Log in", href: "/login" }, { label: "Try the demo account", href: "/login" }, { label: "Price comparison", href: "/#pricing" }] },
+    { title: "Open source", links: [{ label: "GitHub", href: GH }, { label: "Apache-2.0 license", href: GH + "/blob/main/LICENSE" }] },
+    { title: "More IsDead apps", links: [{ label: "CalendlyIsDead", href: "/calendlyisdead" }, { label: "LinktreeIsDead", href: "/linktreeisdead" }, { label: "TrelloIsDead", href: "/trelloisdead" }, { label: "WeTransferIsDead", href: "/wetransferisdead" }, { label: "LoomIsDead", href: "/loomisdead" }] },
+  ],
+  trademark: "BitlyIsDead is an independent open-source project. It is not affiliated with, endorsed by or sponsored by Bitly, Inc. Bitly is a trademark of its owner.",
+  repo: GH,
+};
