@@ -1,14 +1,15 @@
 // Pure helpers for short links: validation, code generation, click classification and stats summaries.
 export type Stats = { clicks: number; scans: number; bots: number; daily: Record<string, number>; dailyScans: Record<string, number>; referrers: Record<string, number>; devices: Record<string, number>; browsers: Record<string, number>; countries: Record<string, number>; cities: Record<string, number> };
 /** A short link. `hidden` mirrors Bitly's "hide link" (still redirects, left out of lists); `tags`/`campaignId` organise the list; `utm` is the builder's state. */
-export type Link = { code: string; ownerId: string; url: string; title: string; createdAt: string; expiresAt: string | null; disabled: boolean; hidden: boolean; tags: string[]; campaignId: string | null; qrId: string | null; stats: Stats };
+export type Link = { code: string; ownerId: string; url: string; title: string; createdAt: string; expiresAt: string | null; disabled: boolean; hidden: boolean; custom: boolean; tags: string[]; campaignId: string | null; qrId: string | null; stats: Stats };
 export const LIMITS = { perUser: 300, url: 2048, title: 100, code: 40, bucket: 60, tag: 30, tagsPerLink: 10 };
 const RESERVED = new Set(["app", "api", "login", "s", "p", "qr", "admin", "links", "new", "pricing", "help", "developers"]);
 export const emptyStats = (): Stats => ({ clicks: 0, scans: 0, bots: 0, daily: {}, dailyScans: {}, referrers: {}, devices: {}, browsers: {}, countries: {}, cities: {} });
 /** Older docs predate tags/hidden/scans/locations: fill the gaps so every reader sees one shape. */
 export function normalizeLink(l: Partial<Link> & { code: string; ownerId: string; url: string }): Link {
   const st = { ...emptyStats(), ...(l.stats ?? {}) };
-  return { title: "", createdAt: new Date(0).toISOString(), expiresAt: null, disabled: false, hidden: false, tags: [], campaignId: null, qrId: null, ...l, stats: st };
+  const custom = l.custom ?? (/[-_]/.test(l.code) || ![6, 8].includes(l.code.length));
+  return { title: "", createdAt: new Date(0).toISOString(), expiresAt: null, disabled: false, hidden: false, tags: [], campaignId: null, qrId: null, ...l, custom, stats: st };
 }
 export function cleanTags(tags: unknown): string[] {
   if (!Array.isArray(tags)) return [];

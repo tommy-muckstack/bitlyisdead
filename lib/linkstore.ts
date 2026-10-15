@@ -23,7 +23,7 @@ export async function createLink(ownerId: string, input: CreateInput, ownHosts: 
     let code = back;
     if (code) { const [a, b] = await Promise.all([getLink(code), code === code.toLowerCase() ? null : getLink(code.toLowerCase())]); if (a || b) return { error: "That back-half is taken." }; }
     else { const cands = Array.from({ length: 6 }, (_, i) => genCode(i < 4 ? 6 : 8)); const taken = await Promise.all(cands.map(getLink)); code = cands.find((_, i) => !taken[i]) ?? ""; if (!code) return { error: "Couldn't find a free code. Try again." }; }
-    const link = normalizeLink({ code, ownerId, url: t.url!, title: (input.title ?? "").trim().slice(0, LIMITS.title), createdAt: new Date().toISOString(), expiresAt: exp, tags: cleanTags(input.tags), campaignId: input.campaignId ?? null, qrId: input.qrId ?? null, stats: emptyStats() });
+    const link = normalizeLink({ code, ownerId, url: t.url!, title: (input.title ?? "").trim().slice(0, LIMITS.title), createdAt: new Date().toISOString(), expiresAt: exp, custom: !!back, tags: cleanTags(input.tags), campaignId: input.campaignId ?? null, qrId: input.qrId ?? null, stats: emptyStats() });
     await Promise.all([putDoc("links", code, link), putDoc("owners", idxKey(ownerId), { codes: [code, ...idx.codes] })]); return { link };
   });
 }
