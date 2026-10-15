@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { PricingBody } from "@/components/PricingBody";
-import { pricingCfg } from "@/components/pricingCfg";
+import { BtPricing } from "@/components/BtPricing";
 import { ShortenBox } from "@/components/ShortenBox";
 import "@/app/landing.css";
 
@@ -52,10 +51,10 @@ export function Landing({ page }: { page?: "pricing" } = {}) {
       <div className="bz-ucards">{cases.map(([t, d, bg]) => <article key={t}><span className="bz-tag">{t}</span><h3>{d}</h3><Link href="/login">Read more →</Link><div className="bz-ill" style={{ background: bg }}><i /><b /></div></article>)}</div>
       <div className="bz-dots bz-dots--n"><i className="on" /><i /><i /><i /><i /></div></section>
 
+    {page === "pricing" && <BtPricing />}
     <section className="bz-more"><div className="bz-more__in"><h2>More than a link shortener</h2><p>Knowing how your clicks and scans are performing should be as easy as making them. Track, analyze, and optimize all your connections in one place.</p>
       <div className="bz-btns"><Link className="bz-navy" href="/login?mode=signup">Get started for free <Arr /></Link><Link className="bz-cream" href="/pricing">Get a Quote</Link></div>
       <div className="bz-shot"><div className="bz-app"><aside><i /><i /><i /><i /><i /><i /></aside><main><div className="bz-app__bar" /><div className="bz-app__tabs"><span>Short link</span><span>QR Code</span></div><div className="bz-app__box"><b>Quick create: Short link</b><span>Enter your destination URL</span><i /><em>Create your link</em></div><div className="bz-app__chart"><b>Total engagements, last 7 days</b><strong>1,199</strong><svg viewBox="0 0 400 80" preserveAspectRatio="none"><path d="M0 60 C60 55 90 20 130 30 S200 70 250 50 S340 30 400 55 V80 H0z" fill="#dfe6fb" stroke="#4a63d8" strokeWidth="2" /></svg></div></main></div></div></div></section>
-    {page === "pricing" && <PricingBody cfg={pricingCfg} />}
 
     <footer className="bz-ft"><div className="bz-ft__cols">{foot.map(([h, ls]) => <div key={h}><h3>{h}</h3>{ls.map(l => <Link key={l} href="/login">{l}</Link>)}</div>)}</div>
       <div className="bz-ft__bar"><Logo c="#031F39" /><p>© 2026 BitlyIsDead | An open-source project handmade in the cloud. Not affiliated with Bitly, Inc. <a href="https://github.com/tommy-muckstack/bitlyisdead">GitHub</a></p><div className="bz-soc">{["f", "in", "◎", "X", "▶", "r"].map(s => <i key={s}>{s}</i>)}</div><div className="bz-badges"><i>GDPR</i><i>CCPA</i><i>SOC 2</i></div><span className="bz-lang">🌐 EN ⌄</span></div></footer>
