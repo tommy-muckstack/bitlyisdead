@@ -1,0 +1,36 @@
+// Original copy for the small info pages. Keep it honest: this is an open-source clone with no company behind it.
+type Sec = { id?: string; h: string; p: string[]; li?: string[] };
+export const INFO: Record<string, { title: string; lede: string; sections: Sec[] }> = {
+  help: { title: "Help Center", lede: "Short answers for the things people ask most.", sections: [
+    { h: "Making a link", p: ["Paste a destination on Home for a one-step short link, or use Create new → Link for a title, custom back-half, UTM parameters, tags and an expiry. The short link is copied to your clipboard when it's created."] },
+    { h: "Why was my link refused?", p: ["Only public http(s) destinations are accepted. Private addresses, localhost, links with embedded passwords and other short links are turned down so the redirect can never be abused."] },
+    { h: "Editing and turning links off", p: ["Open a link's details page to change the destination, title, tags or expiry. Turn off keeps the link but shows visitors a clear 'turned off' page; Hide keeps it working but removes it from your lists. Delete is permanent and asks first."] },
+    { h: "QR Codes", p: ["Every QR Code points at a short link, so you can change where it goes without reprinting. Design it with colours, patterns, corners, a frame and a logo, then download PNG, SVG or JPEG. Scans are counted separately from clicks."] },
+    { h: "Pages", p: ["A page collects your links with a theme and blocks and is published at /p/your-name. Views and clicks per button are counted."] },
+    { h: "Guests and accounts", p: ["You can use everything without signing up. Your work is tied to a cookie in this browser; sign in with email or Google to keep it on every device. Signing in moves your guest links to your account."] },
+    { h: "Limits", p: ["300 links, 50 pages, 100 campaigns, 20 domains and 10 API tokens per account. Clicks and scans are unlimited."] },
+    { id: "contact", h: "Still stuck?", p: ["Open an issue on GitHub: github.com/tommy-muckstack/bitlyisdead/issues. There is no support team, but issues are read."] } ] },
+  privacy: { title: "Privacy Policy", lede: "What this app stores, and what it doesn't.", sections: [
+    { h: "What we store", p: ["Your links, QR Code designs, pages, campaigns, domains, API token hashes and a display name, keyed to your account or guest id. For each visit to a short link we store counts by day, referrer domain, device type, browser family, country and city."] },
+    { h: "What we don't store", p: ["Visitors' IP addresses are never written to storage; country and city come from headers the hosting platform attaches. We don't run ad tracking, sell data or fingerprint browsers. The raw user-agent string is not stored."] },
+    { id: "cookies", h: "Cookies", p: ["Three cookies, all first-party and essential: a session cookie after you sign in, a guest cookie so your work survives a reload before you sign up, and a demo cookie on demo deployments. There are no advertising or analytics cookies on short-link redirects or public pages."] },
+    { h: "Accounts", p: ["Sign-in uses Firebase Authentication with email/password or Google. We receive your email address and display name. Deleting your account is a GitHub issue away until a self-serve button ships."] },
+    { h: "Self-hosting", p: ["The code is Apache-2.0. If you run your own copy, this policy describes the code's behaviour, not any promise by the hosted demo."] } ] },
+  terms: { title: "Terms of Service", lede: "Plain terms for a free, open-source tool.", sections: [
+    { h: "The service", p: ["BitlyIsDead is provided as-is, free of charge, with no uptime or data-retention guarantee. It is an independent open-source project and is not affiliated with Bitly, Inc."] },
+    { h: "Your content", p: ["You own the links, pages and designs you create. You are responsible for where your links point and for having the right to use any logo you upload."] },
+    { h: "Our rights", p: ["We may remove links, pages or accounts that break the Acceptable Use Policy, and may change or stop the hosted service at any time. The code remains available under the Apache-2.0 license."] },
+    { h: "Liability", p: ["To the extent the law allows, the project and its contributors are not liable for any loss arising from use of the service."] } ] },
+  "acceptable-use": { title: "Acceptable Use Policy", lede: "Short links can hide where they go, so these rules keep them trustworthy.", sections: [
+    { h: "Not allowed", p: ["Links or pages that point to malware, phishing, scams, credential harvesting, illegal content, harassment, or content that infringes someone's rights; links used to evade another service's blocks; abusive automated creation."], li: ["Destinations on private networks or localhost are refused automatically.", "Links to other short-link services are refused to prevent redirect chains.", "Embedded usernames or passwords in a destination are refused."] },
+    { h: "Enforcement", p: ["Links that break these rules are turned off and the account may be removed. Report abuse by opening a GitHub issue with the short link."] } ] },
+  about: { title: "About BitlyIsDead", lede: "A free, open-source stand-in for Bitly, built as part of the IsDead series of SaaS clones.", sections: [
+    { h: "Why", p: ["Short links, QR Codes and link-in-bio pages are simple things that have ended up behind $10–$300/month plans. This app rebuilds them, with the same structure as the original, and gives them away under the Apache-2.0 license."] },
+    { id: "whats-new", h: "What's new (October 2026)", p: [], li: ["Real app sections: Links with tags, filters and bulk actions; a create flow with UTM builder; styled QR Codes with PNG/SVG/JPEG downloads and scan counts; Pages; Campaigns; Analytics with locations; custom-domain verification; Settings with API tokens.", "Guest sessions: use everything before you sign up; sign-in keeps your work.", "A REST API with bearer tokens (see Developers)."] },
+    { id: "contact", h: "Contact", p: ["There is no sales team and nothing to quote: every feature is free. For bugs, ideas or a security report, open an issue at github.com/tommy-muckstack/bitlyisdead/issues."] },
+    { h: "Trademark", p: ["Bitly is a trademark of its owner. BitlyIsDead is not affiliated with, endorsed by or sponsored by Bitly, Inc."] } ] },
+  accessibility: { title: "Accessibility Statement", lede: "What's in place, and what isn't yet.", sections: [
+    { h: "In place", p: [], li: ["Every control is a real button, link or input with a label; icon-only buttons carry aria-labels.", "Dialogs trap Escape and return focus; menus and switches expose their state.", "The app works at 390px wide without horizontal scrolling; text scales with browser settings.", "Colour contrast on text and controls targets WCAG AA."] },
+    { h: "Not yet", p: [], li: ["Bar charts are summarised in a text label but not as a data table.", "The link-in-bio editor's reorder uses up/down buttons rather than drag and drop (deliberate), but has no keyboard shortcut.", "No formal audit has been done."] },
+    { h: "Tell us", p: ["If something is hard to use with a screen reader or keyboard, open a GitHub issue and it will be prioritised."] } ] },
+};
