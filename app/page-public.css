@@ -1,0 +1,9 @@
+/* Link-in-bio page (public + editor preview). Theme colours arrive as --pg-* custom properties. */
+.pg{min-height:100vh;background:var(--pg-bg);color:var(--pg-ink);font-family:var(--ids-font-sans);display:flex;justify-content:center;padding:48px 16px}.pg--preview{min-height:100%;padding:28px 14px}
+.pg-in{width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.pg-av{width:84px;height:84px;border-radius:50%;background:var(--pg-card);border:1px solid var(--pg-bd);display:grid;place-items:center;font-size:38px;font-weight:700}.pg--preview .pg-av{width:64px;height:64px;font-size:28px}
+.pg-t{margin:6px 0 0;font-size:26px;font-weight:700}.pg--preview .pg-t{font-size:20px}.pg-bio{margin:0;font-size:15px;opacity:.85;max-width:420px}
+.pg-blocks{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.pg-link{display:block;padding:15px 18px;border-radius:14px;background:var(--pg-card);border:1px solid var(--pg-bd);color:inherit;text-decoration:none;font-weight:600;font-size:16px;transition:transform .12s}.pg-link:hover{transform:translateY(-1px)}.pg--preview .pg-link{padding:12px 14px;font-size:14px}
+.pg-h{margin:14px 0 0;font-size:14px;letter-spacing:.08em;text-transform:uppercase;opacity:.75}.pg-p{margin:0;font-size:15px;opacity:.9;white-space:pre-wrap}
+.pg-foot{margin-top:30px;font-size:12px;opacity:.6}.pg-foot a{color:inherit}
