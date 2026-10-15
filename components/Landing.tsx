@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { BtPricing } from "@/components/BtPricing";
 import { ShortenBox } from "@/components/ShortenBox";
+import { Mark } from "@/components/Mark";
 import "@/app/landing.css";
 
 // Structure mirrors bitly.com's homepage: promo bar, navy hero with a shorten card, cream bento, KPI row,
 // testimonial carousel, use-case cards, big product screenshot and an orange footer. All art is original.
 const Arr = () => <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-const Logo = ({ c = "#F36600" }: { c?: string }) => <span className="bz-logo" style={{ color: c }}>bitlyisdead</span>;
+const Logo = ({ c = "#F36600" }: { c?: string }) => <span className="bz-logo" style={{ color: c }}><Mark size={34} />bitlyisdead</span>;
 const Chk = () => <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden><circle cx="8" cy="8" r="7" fill="none" stroke="#F36600" strokeWidth="1.4" /><path d="M5 8.3l2 2 4-4.4" fill="none" stroke="#F36600" strokeWidth="1.4" strokeLinecap="round" /></svg>;
 const Car = () => <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden style={{ marginLeft: 6 }}><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>;
 const brands = ["Curology", "NOVASOL", "RAD POWER BIKES", "bowl & kettle", "The New York Times", "SMALLS"];
