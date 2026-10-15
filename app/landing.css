@@ -86,3 +86,5 @@
 
 /* pricing page: hide home sections, keep header/footer */
 .bz.is-pr>*:not(.bz-hero):not(footer):not(.pb){display:none!important}.bz.is-pr .bz-hero>*:not(.bz-nav){display:none!important}.bz.is-pr .bz-hero{height:auto!important;min-height:0!important;background:#f3f3f3!important;color:#031f39}{display:none!important}
+/* mobile vertical rhythm tuned to bitly.com at 390 */
+@media (max-width:600px){.bz-kpi{height:1430px!important;overflow:hidden}.bz-say{height:568px!important;min-height:0;overflow:hidden}.bz-use{height:444px!important;min-height:0;overflow:hidden}.bz-more__in{padding-bottom:275px!important}.bz-ft__cols{grid-template-columns:1fr!important}}
