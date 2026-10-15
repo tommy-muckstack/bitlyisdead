@@ -83,3 +83,6 @@
   .bz-say{padding-top:100px;min-height:568px}.bz-cards{margin-top:40px}.bz-use{min-height:444px;padding-top:80px}.bz-ucards{margin-top:32px}.bz-more__in{padding-top:48px}
 }
 @media (max-width:600px){.bz-hero{min-height:1294px}.bz-b{min-height:478px}.bz-use{height:auto;min-height:0;padding-bottom:0}.bz-ucards article{height:360px}.bz-ill{height:150px}.bz-kpi{padding-top:70px}}
+
+/* pricing page: hide home sections, keep header/footer */
+.bz.is-pr>*:not(.bz-hero):not(footer):not(.pb){display:none!important}.bz.is-pr .bz-hero>*:not(.bz-nav){display:none!important}.bz.is-pr .bz-hero{height:auto!important;min-height:0!important;background:#f3f3f3!important;color:#031f39}{display:none!important}

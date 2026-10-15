@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { PricingBody } from "@/components/PricingBody";
+import { pricingCfg } from "@/components/pricingCfg";
 import { ShortenBox } from "@/components/ShortenBox";
 import "@/app/landing.css";
 
@@ -14,8 +16,8 @@ const quotes = [["“Upon implementing the tool, we were able to know where our 
 const cases = [["Retail", "Attract customers and keep loyal shoppers coming back", "#F7C9A6"], ["Consumer Packaged Goods", "Thriving brands start with raving fans and powerful connections", "#CFE3F5"], ["Hospitality", "Delight your guests and anticipate their every need with easy-to-use digital solutions", "#F6E1A6"], ["Media & Entertainment", "Turn newcomers into diehard fans by capturing their attention at the perfect time", "#D9D2F2"]];
 const foot: [string, string[]][] = [["Why Bitly?", ["Integration Library", "Enterprise Class", "Pricing"]], ["Products", ["URL Shortener", "QR Code Generator", "2D Barcodes", "Analytics", "Pages", "Features", "Link-in-bio", "Branded Links", "Mobile Links", "UTM Campaigns", "Digital Business Cards", "Dynamic Routing"]], ["Solutions", ["Retail", "Consumer Packaged Goods", "Hospitality", "Media & Entertainment", "Tech Software & Hardware", "Healthcare", "Insurance", "Financial Services", "Professional Services", "Education"]], ["Resources", ["Blog", "Guides & eBooks", "Videos & Webinars", "Customer Stories", "QR Code Inspiration Gallery", "Developers", "Apps and Integrations", "Help Center", "Trust Center", "Browser Extension", "Mobile App"]], ["Legal", ["Privacy Policy", "Cookie Policy", "Terms of Service", "Acceptable Use Policy", "Code of Conduct", "Transparency Report", "Patents"]], ["Company", ["About", "Careers", "Inclusion", "Partners", "Press", "Contact", "Reviews", "Accessibility Report", "Accessibility Statement"]]];
 
-export function Landing() {
-  return <div className="bz">
+export function Landing({ page }: { page?: "pricing" } = {}) {
+  return <div className={"bz" + (page === "pricing" ? " is-pr" : "")}>
     <div className="bz-promo"><span className="bz-new">New</span><span>The Click Expectation Report is here! Explore new research on what consumers want vs. what they get. <Link href="/pricing">Read the report →</Link></span></div>
     <section className="bz-hero">
       <nav className="bz-nav"><Link href="/" className="bz-navlogo"><Logo /></Link>
@@ -53,6 +55,7 @@ export function Landing() {
     <section className="bz-more"><div className="bz-more__in"><h2>More than a link shortener</h2><p>Knowing how your clicks and scans are performing should be as easy as making them. Track, analyze, and optimize all your connections in one place.</p>
       <div className="bz-btns"><Link className="bz-navy" href="/login?mode=signup">Get started for free <Arr /></Link><Link className="bz-cream" href="/pricing">Get a Quote</Link></div>
       <div className="bz-shot"><div className="bz-app"><aside><i /><i /><i /><i /><i /><i /></aside><main><div className="bz-app__bar" /><div className="bz-app__tabs"><span>Short link</span><span>QR Code</span></div><div className="bz-app__box"><b>Quick create: Short link</b><span>Enter your destination URL</span><i /><em>Create your link</em></div><div className="bz-app__chart"><b>Total engagements, last 7 days</b><strong>1,199</strong><svg viewBox="0 0 400 80" preserveAspectRatio="none"><path d="M0 60 C60 55 90 20 130 30 S200 70 250 50 S340 30 400 55 V80 H0z" fill="#dfe6fb" stroke="#4a63d8" strokeWidth="2" /></svg></div></main></div></div></div></section>
+    {page === "pricing" && <PricingBody cfg={pricingCfg} />}
 
     <footer className="bz-ft"><div className="bz-ft__cols">{foot.map(([h, ls]) => <div key={h}><h3>{h}</h3>{ls.map(l => <Link key={l} href="/login">{l}</Link>)}</div>)}</div>
       <div className="bz-ft__bar"><Logo c="#031F39" /><p>© 2026 BitlyIsDead | An open-source project handmade in the cloud. Not affiliated with Bitly, Inc. <a href="https://github.com/tommy-muckstack/bitlyisdead">GitHub</a></p><div className="bz-soc">{["f", "in", "◎", "X", "▶", "r"].map(s => <i key={s}>{s}</i>)}</div><div className="bz-badges"><i>GDPR</i><i>CCPA</i><i>SOC 2</i></div><span className="bz-lang">🌐 EN ⌄</span></div></footer>
