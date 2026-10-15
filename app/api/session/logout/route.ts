@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { SESSION_COOKIE, DEMO_COOKIE, cookieOptions, verifySessionCookie, revokeSessions } from "@/lib/isdead-auth/server";
+import { SESSION_COOKIE, DEMO_COOKIE, GUEST_COOKIE, cookieOptions, verifySessionCookie, revokeSessions } from "@/lib/isdead-auth/server";
 import { BP } from "@/lib/basepath";
 export const runtime = "nodejs";
 export async function POST(req: NextRequest) {
@@ -11,5 +11,6 @@ export async function POST(req: NextRequest) {
   const res = new NextResponse(null, { status: 303, headers: { Location: BP + "/" } });
   res.cookies.set(SESSION_COOKIE, "", cookieOptions(0));
   res.cookies.set(DEMO_COOKIE, "", cookieOptions(0));
+  res.cookies.set(GUEST_COOKIE, "", cookieOptions(0));
   return res;
 }
