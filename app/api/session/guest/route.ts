@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 // *.vercel.app origin, and an absolute redirect would carry the visitor off the public domain.
 export async function GET(req: NextRequest) {
   const raw = req.nextUrl.searchParams.get("next") || "/app";
-  const next = /^\/(?!\/)[\w\-./?=&%]*$/.test(raw) ? raw : "/app";
+  const next = /^\/(?!\/)[\w\-./?=&%+~:,]*$/.test(raw) ? raw : "/app";
   const go = (path: string) => new NextResponse(null, { status: 307, headers: { Location: BP + path } });
   if (!guestEnabled()) return go("/login?callbackUrl=" + encodeURIComponent(next));
   const res = go(next);
