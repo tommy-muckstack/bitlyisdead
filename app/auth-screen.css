@@ -1,7 +1,7 @@
 @font-face{font-family:"IsDead Figtree";src:url("./fonts/Figtree-Variable.woff2") format("woff2");font-weight:300 900;font-style:normal;font-display:swap}
 .bz-au{min-height:100vh;display:grid;grid-template-columns:60fr 40fr;background:#fff;color:#273144;font-family:"IsDead Figtree",system-ui,sans-serif}
 .bz-left{position:relative;min-height:100vh}
-.bz-logo{position:absolute;left:99px;top:30px;font-size:42px;line-height:52px;font-weight:800;letter-spacing:-.04em;color:#ee6123;text-decoration:none}
+.bz-logo{position:absolute;left:99px;top:30px;font-size:34px;line-height:52px;font-weight:800;letter-spacing:-.04em;color:#ee6123;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
 .bz-form{width:562px;max-width:calc(100% - 40px);margin:0 auto;padding-top:136px;display:flex;flex-direction:column}
 .bz-form h1{margin:0;font-size:29px;line-height:40px;font-weight:700;letter-spacing:-.01em;color:#273144}
 .bz-sub{margin:8px 0 32px;font-size:16px;line-height:24px;color:#273144}

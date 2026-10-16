@@ -2,7 +2,7 @@
 @font-face{font-family:"IsDead Figtree";src:url("./fonts/Figtree-Variable.woff2") format("woff2");font-weight:300 900;font-style:normal;font-display:swap}
 .bz{--navy:#031F39;--cream:#F6F4EF;--orange:#F36600;--ink:#2F2E2D;font-family:"IsDead Figtree",system-ui,sans-serif;background:var(--cream);color:var(--navy);overflow-x:clip}
 .bz h1,.bz h2,.bz h3,.bz p{margin:0}:where(.bz) a{color:inherit;text-decoration:none}
-.bz-logo{font-weight:800;font-size:30px;letter-spacing:-.04em;font-family:inherit}
+.bz-logo{font-weight:800;font-size:30px;letter-spacing:-.04em;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
 .bz-promo{height:40px;background:#FFB45E;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:500;color:var(--navy);position:relative;z-index:2;background:linear-gradient(#FFB45E,#FFA23A)}
 .bz-new{background:var(--navy);color:#fff;border-radius:999px;font-size:12px;padding:2px 9px;font-weight:600}.bz-promo a{text-decoration:underline}
 .bz-hero{background:var(--navy);height:1077px;margin-top:0;position:relative;color:#fff;text-align:center;padding-top:0;margin-top:-0px;box-sizing:border-box}
