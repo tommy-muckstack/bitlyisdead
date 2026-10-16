@@ -6,7 +6,7 @@ import { useAuth } from "@/components/useAuth";
 import { Mark } from "@/components/Mark";
 
 const GG = <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.2a5.3 5.3 0 01-2.3 3.5v2.9h3.7c2.2-2 3.4-5 3.4-8.4z" /><path fill="#34A853" d="M12 23.5c3.1 0 5.7-1 7.6-2.8l-3.7-2.9c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3A11.5 11.5 0 0012 23.5z" /><path fill="#FBBC05" d="M5.6 14.2a6.9 6.9 0 010-4.4v-3H1.8a11.5 11.5 0 000 10.4z" /><path fill="#EA4335" d="M12 5.4c1.7 0 3.2.6 4.4 1.7l3.3-3.3A11.5 11.5 0 001.8 6.8l3.8 3A6.9 6.9 0 0112 5.4z" /></svg>;
-const AP = <svg width="13" height="15" viewBox="0 0 24 24" aria-hidden><path fill="#111" d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9s-1.8-.8-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.600-.7 3-.7s1.800.7 3 .7 2-1.100 2.800-2.200c.9-1.300 1.200-2.500 1.300-2.600-.1 0-2.500-1-2.500-3.900zM14.100 5.700c.6-.8 1.100-1.900.9-3-.9 0-2.100.6-2.700 1.400-.6.700-1.100 1.800-1 2.900 1 .1 2.100-.5 2.800-1.300z" /></svg>;
+const _AP = <svg width="13" height="15" viewBox="0 0 24 24" aria-hidden><path fill="#111" d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9s-1.8-.8-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.600-.7 3-.7s1.800.7 3 .7 2-1.100 2.800-2.200c.9-1.300 1.200-2.500 1.300-2.600-.1 0-2.500-1-2.500-3.900zM14.100 5.700c.6-.8 1.100-1.900.9-3-.9 0-2.100.6-2.700 1.400-.6.700-1.100 1.800-1 2.900 1 .1 2.100-.5 2.800-1.300z" /></svg>;
 const ST = { stroke: "#1d2b3f", strokeWidth: 1.4 } as const;
 const doc = (x: number, y: number) => <g key={`${x}${y}`}><rect x={x} y={y} width="22" height="28" rx="2" fill="#fff" {...ST} /><path d={`M${x + 4} ${y + 7} h14 M${x + 4} ${y + 12} h14 M${x + 4} ${y + 17} h10`} stroke="#c9a77a" strokeWidth="2" /></g>;
 function ArtLogin() {
@@ -48,31 +48,29 @@ function ArtSignup() {
     <g transform="rotate(-18 832 270)"><rect x="795" y="248" width="76" height="46" rx="3" fill="#f58a1f" stroke="#1d2b3f" strokeWidth="1.4" /><rect x="826" y="256" width="22" height="22" fill="#fff" /></g>
   </svg>;
 }
-export function AuthScreen({ config, demo, to, signup = false }: { config: FirebaseClientConfig | null; demo: boolean; to: string; signup?: boolean }) {
-  const a = useAuth({ config, demo, to, signup });
+export function AuthScreen({ config, demo, to, signup = false, reset: resetPage = false }: { config: FirebaseClientConfig | null; demo: boolean; to: string; signup?: boolean; reset?: boolean }) {
+  const a = useAuth({ config, demo, to, signup, reset: resetPage });
   const su = a.mode === "signup", reset = a.mode === "reset";
   return <main className="bz-au">
     <section className="bz-left">
       <Link href="/" className="bz-logo" aria-label="Home"><Mark size={40} />bitlyisdead</Link>
       <form className="bz-form" onSubmit={a.submit(false)}>
         <h1>{reset ? "Reset your password" : su ? "Create your account" : "Log in and start sharing"}</h1>
-        <p className="bz-sub">{reset ? "Enter your email and we’ll send you a link." : su ? <>Already have an account? <a href="#" onClick={a.go("signin")}>Log in</a> or <a href="#" onClick={a.off}>Log in with SSO</a></> : <>Don’t have an account? <a href="#" onClick={a.go("signup")}>Sign up</a></>}</p>
+        <p className="bz-sub">{reset ? "Enter the email you signed up with and we’ll send a reset link." : su ? <>Already have an account? <a href="#" onClick={a.go("signin")}>Log in</a></> : <>Don’t have an account? <a href="#" onClick={a.go("signup")}>Sign up</a></>}</p>
         {!reset && <>
           <button type="button" className="bz-prov" onClick={a.google} disabled={a.busy}>{GG}<span>Continue with Google</span></button>
-          {!su && <><button type="button" className="bz-prov" onClick={a.off} aria-disabled="true" title="Not available yet in the open-source version">{AP}<span>Continue with Apple</span></button>
-            <button type="button" className="bz-prov" onClick={a.off} aria-disabled="true" title="Not available yet in the open-source version"><span>Continue with Single Sign On</span></button></>}
           <div className="bz-or"><span>OR</span></div></>}
-        <label htmlFor="bz-e">Email</label><input id="bz-e" type="email" required autoComplete="email" value={a.email} onChange={e => a.setEmail(e.target.value)} />
+        <label htmlFor="bz-e">{reset ? "Email" : "Email"}</label><input id="bz-e" type="email" required autoComplete="email" value={a.email} onChange={e => a.setEmail(e.target.value)} />
         {!reset && <><label htmlFor="bz-p">Password</label><input id="bz-p" type="password" required minLength={6} autoComplete={su ? "new-password" : "current-password"} value={a.password} onChange={e => a.setPassword(e.target.value)} /></>}
-        {!su && !reset && <a href="#" className="bz-fgt" onClick={a.go("reset")}>Forgot your password?</a>}
-                <button className="bz-cta" disabled={a.busy}>{reset ? "Email me a reset link" : su ? "Create free account" : "Log in"}</button>
+        {!su && !reset && <Link href="/forgot-password" className="bz-fgt">Forgot your password?</Link>}
+                <button className="bz-cta" disabled={a.busy}>{reset ? "Reset" : su ? "Create free account" : "Log in"}</button>
         {a.err && <p role="alert" className="bz-err">{a.err}</p>}{a.note && <p role="status" className="bz-ok">{a.note}</p>}
-        {!reset && <p className="bz-legal">{su ? "By creating an account, you agree to Bitly’s " : "By logging in with an account, you agree to Bitly’s "}<a href="#" onClick={a.off}>Terms of Service</a>, <a href="#" onClick={a.off}>Privacy Policy</a> and <a href="#" onClick={a.off}>Acceptable Use Policy</a>.</p>}
-        {reset && <p className="bz-legal"><a href="#" onClick={a.go("signin")}>Back to log in</a></p>}
+        {!reset && <p className="bz-legal">{su ? "By creating an account, you agree to BitlyIsDead’s " : "By logging in with an account, you agree to BitlyIsDead’s "}<Link href="/terms">Terms of Service</Link>, <Link href="/privacy">Privacy Policy</Link> and <Link href="/acceptable-use">Acceptable Use Policy</Link>.</p>}
+        {reset && <p className="bz-legal"><Link href="/login">Back to log in</Link></p>}
         {a.demo && <button type="button" className="bz-demo" onClick={a.useDemo}>Use the demo account</button>}
       </form>
       {!a.configured && <p className="bz-cfg" role="status">Sign-in isn’t configured on this deployment yet.</p>}
     </section>
-    <aside className={`bz-right${su ? " su" : ""}`}>{su ? <ArtSignup /> : <ArtLogin />}<p className="bz-cap">{su ? <>Power your links, QR Codes and landing pages with Bitly</> : "Connect Bitly to the tools you use every day"}</p></aside>
+    <aside className={`bz-right${su ? " su" : ""}`}>{su ? <ArtSignup /> : <ArtLogin />}<p className="bz-cap">{su ? <>Power your links, QR Codes and landing pages, free</> : "Short links, QR Codes and pages that stay yours"}</p></aside>
   </main>;
 }

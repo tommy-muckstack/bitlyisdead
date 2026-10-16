@@ -23,7 +23,7 @@ export function Marketing() {
       <div key={s.t} className="ids-card mk-step"><span className="ids-pill">{i + 1}</span><h3 className="ids-h3" style={{ margin: "16px 0 8px" }}>{s.t}</h3><p className="ids-muted" style={{ margin: 0 }}>{s.d}</p></div>)}</div></Section>
     {site.rows.map((r, i) => <Section key={r.id} id={r.id} style={{ paddingTop: 48, paddingBottom: 48 }}>
       <div className={"mk-row" + (i % 2 ? " mk-row--flip" : "")}>
-        <div><span className="ids-pill">{r.k}</span><h2 className="ids-h2 mk-row__h">{r.h}</h2><p className="ids-muted mk-lede">{r.p}</p><Link className="ids-btn ids-btn--outline" href="/login" style={{ marginTop: 12 }}>{r.cta}</Link></div>
+        <div><span className="ids-pill">{r.k}</span><h2 className="ids-h2 mk-row__h">{r.h}</h2><p className="ids-muted mk-lede">{r.p}</p><Link className="ids-btn ids-btn--outline" href={`/app/${r.id === "links" ? "links/new" : r.id === "qr" ? "qr/new" : r.id === "analytics" ? "analytics" : "links"}`} style={{ marginTop: 12 }}>{r.cta}</Link></div>
         <div><Shot src={r.img} alt={r.alt} /></div></div></Section>)}
     <Section id="resources" title={site.statsTitle}><div className="mk-stats">{site.stats.map(s => <div key={s.b} className="ids-card"><b>{s.b}</b><span className="ids-muted">{s.s}</span></div>)}</div></Section>
     <Section title={site.integrations.title} subtitle={site.integrations.text} />
