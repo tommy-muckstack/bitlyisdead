@@ -2,13 +2,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { Confirm } from "@/components/Modal";
 import { CopyButton, useOrigin } from "@/components/LinksApp";
 import { plural } from "@/lib/links";
 import type { DomainDoc } from "@/lib/domainstore";
 export function Domains({ initial }: { initial: DomainDoc[] }) {
   const origin = useOrigin(); const r = useRouter(); const [rows, setRows] = useState(initial); const [host, setHost] = useState(""); const [err, setErr] = useState(""); const [busy, setBusy] = useState<string | null>(null); const [del, setDel] = useState<DomainDoc | null>(null); const ownHost = origin.replace(/^https?:\/\//, "").split(":")[0] || "yourappisdead.com";
-  const add = async (e: React.FormEvent) => { e.preventDefault(); setBusy("add"); setErr(""); const res = await fetch(`${BP}/api/domains`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ host }) }); const j = await res.json().catch(() => ({})); setBusy(null); if (!res.ok) return setErr(j.error ?? "Could not add that domain."); setRows(rs => [j.domain, ...rs]); setHost(""); r.refresh(); };
+  const add = async (e: React.FormEvent) => { e.preventDefault(); setBusy("add"); setErr(""); const res = await fetch(`${BP}/api/domains`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ host }) }); const j = await res.json().catch(() => ({})); setBusy(null); if (!res.ok) return setErr(j.error ?? "Could not add that domain."); track(EVENTS.app_domain_added); setRows(rs => [j.domain, ...rs]); setHost(""); r.refresh(); };
   const verify = async (d: DomainDoc) => { setBusy(d.id); const res = await fetch(`${BP}/api/domains/${d.id}/verify`, { method: "POST" }); setBusy(null); if (res.ok) { const { domain } = await res.json(); setRows(rs => rs.map(x => x.id === d.id ? domain : x)); r.refresh(); } };
   const remove = async (d: DomainDoc) => { setDel(null); if ((await fetch(`${BP}/api/domains/${d.id}`, { method: "DELETE" })).ok) { setRows(rs => rs.filter(x => x.id !== d.id)); r.refresh(); } };
   return <main className="bl-app bl-links">

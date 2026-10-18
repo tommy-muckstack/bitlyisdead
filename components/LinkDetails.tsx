@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { CopyButton, shortUrl, useOrigin } from "@/components/LinksApp";
 import { Confirm } from "@/components/Modal";
 import { TagInput } from "@/components/TagInput";
@@ -13,8 +14,8 @@ export function LinkDetails({ initial, extra }: { initial: L; extra?: React.Reac
   const origin = useOrigin(); const r = useRouter(); const created = useSearchParams().get("created") === "1";
   const [l, setL] = useState(initial); const [url, setUrl] = useState(initial.url); const [title, setTitle] = useState(initial.title); const [tags, setTags] = useState(initial.tags); const [msg, setMsg] = useState(""); const [ask, setAsk] = useState(false);
   const s = series(l.stats, 30); const max = Math.max(1, ...s.map(x => x.count + x.scans)); const full = `${origin}${BP}/s/${l.code}`;
-  const patch = async (body: object) => { setMsg(""); const res = await fetch(`${BP}/api/links/${l.code}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); const j = await res.json().catch(() => ({})); if (!res.ok) return setMsg(j.error ?? "Could not save."); setL(j.link); setUrl(j.link.url); setTags(j.link.tags); setMsg("Saved"); r.refresh(); };
-  const del = async () => { if ((await fetch(`${BP}/api/links/${l.code}`, { method: "DELETE" })).ok) { r.push("/app/links"); r.refresh(); } };
+  const patch = async (body: object) => { setMsg(""); const res = await fetch(`${BP}/api/links/${l.code}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); const j = await res.json().catch(() => ({})); if (!res.ok) return setMsg(j.error ?? "Could not save."); track(EVENTS.app_link_updated, { fields: Object.keys(body).length, bulk: false, count: 1 }); setL(j.link); setUrl(j.link.url); setTags(j.link.tags); setMsg("Saved"); r.refresh(); };
+  const del = async () => { if ((await fetch(`${BP}/api/links/${l.code}`, { method: "DELETE" })).ok) { track(EVENTS.app_links_deleted, { count: 1 }); r.push("/app/links"); r.refresh(); } };
   return <main className="bl-app"><p><Link href="/app/links">← Links</Link></p>
     {created && <div className="bl-fresh" role="status">Your link is ready and was copied to your clipboard.</div>}
     <section className="ids-card bl-det"><div><h1 className="ids-h2" style={{ fontSize: 28 }}>{l.title || hostOf(l.url)}</h1>

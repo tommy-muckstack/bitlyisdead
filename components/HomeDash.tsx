@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { CopyButton, shortUrl, useOrigin } from "@/components/LinksApp";
 import { hostOf, plural, type Link as L } from "@/lib/links";
 export function HomeDash({ links, prefill, name, extra, hasPage = false, useCase = "" }: { links: L[]; prefill?: string; name: string; extra?: React.ReactNode; hasPage?: boolean; useCase?: string }) {
   const origin = useOrigin(); const r = useRouter(); const [url, setUrl] = useState(prefill ?? ""); const [busy, setBusy] = useState(false); const [err, setErr] = useState(""); const [made, setMade] = useState<L | null>(null); const [tab, setTab] = useState<"link" | "qr">("link");
-  const create = async (e: React.FormEvent) => { e.preventDefault(); if (tab === "qr") { r.push(`/app/qr/new?url=${encodeURIComponent(url.trim())}`); return; } setBusy(true); setErr(""); const res = await fetch(`${BP}/api/links`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Something went wrong."); setMade(j.link); setUrl(""); try { await navigator.clipboard.writeText(`${origin}${BP}/s/${j.link.code}`); } catch { /* clipboard blocked */ } r.refresh(); };
+  const create = async (e: React.FormEvent) => { e.preventDefault(); if (tab === "qr") { r.push(`/app/qr/new?url=${encodeURIComponent(url.trim())}`); return; } setBusy(true); setErr(""); const res = await fetch(`${BP}/api/links`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Something went wrong."); track(EVENTS.app_link_created, { entry_point: "home", custom_back_half: false, has_tags: false, has_campaign: false, has_expiry: false, has_utm: false, with_qr: false }); setMade(j.link); setUrl(""); try { await navigator.clipboard.writeText(`${origin}${BP}/s/${j.link.code}`); } catch { /* clipboard blocked */ } r.refresh(); };
   const vis = links.filter(l => !l.hidden); const recent = vis.slice(0, 5);
   const days = Array.from({ length: 7 }, (_, i) => i); const agg = days.map(i => { const d = new Date(Date.now() - (6 - i) * 864e5).toISOString().slice(0, 10); let c = 0, s = 0; for (const l of vis) { c += l.stats.daily[d] ?? 0; s += l.stats.dailyScans?.[d] ?? 0; } return { d, c, s }; }); const tot = agg.reduce((n, x) => n + x.c + x.s, 0); const max = Math.max(1, ...agg.map(x => x.c + x.s));
   return <main className="bl-app bl-home">

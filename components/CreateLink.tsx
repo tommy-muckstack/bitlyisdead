@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { useOrigin } from "@/components/LinksApp";
 import { TagInput } from "@/components/TagInput";
 import { UtmBuilder, applyUtm, emptyUtm } from "@/components/UtmBuilder";
@@ -13,6 +14,7 @@ export function CreateLink({ prefill, domains = [], campaign, suggestions = [] }
   const submit = async (e: React.FormEvent) => { e.preventDefault(); setBusy(true); setErr(""); const t0 = performance.now();
     const res = await fetch(`${BP}/api/links`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url: dest, title, backHalf: back, tags, campaignId: campaign?.id ?? null, domain: domain || undefined, expiresAt: exp ? new Date(exp + "T23:59:59").toISOString() : null }) }); const j = await res.json().catch(() => ({})); setBusy(false);
     if (!res.ok) return setErr(j.error ?? "Something went wrong.");
+    track(EVENTS.app_link_created, { entry_point: "form", custom_back_half: !!back.trim(), has_tags: tags.length > 0, has_campaign: !!campaign, has_expiry: !!exp, has_utm: dest !== url, with_qr: qr });
     try { await navigator.clipboard.writeText(`${origin}${BP}/s/${j.link.code}`); } catch { /* blocked */ }
     if (process.env.NODE_ENV !== "production") console.info(`link created in ${Math.round(performance.now() - t0)} ms`);
     r.push(qr ? `/app/qr/new?link=${j.link.code}` : `/app/l/${j.link.code}?created=1`); r.refresh(); };

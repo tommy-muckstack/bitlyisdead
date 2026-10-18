@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { Confirm, Modal } from "@/components/Modal";
 import { Bars } from "@/components/LinkDetails";
 import { shortUrl, useOrigin } from "@/components/LinksApp";
@@ -25,7 +26,7 @@ export function CampaignsList({ initial, links }: { initial: CampaignDoc[]; link
 }
 export function CampaignForm({ initial }: { initial?: CampaignDoc }) {
   const r = useRouter(); const [name, setName] = useState(initial?.name ?? ""); const [desc, setDesc] = useState(initial?.description ?? ""); const [utm, setUtm] = useState(initial?.utm ?? { source: "", medium: "", campaign: "" }); const [err, setErr] = useState(""); const [busy, setBusy] = useState(false);
-  const submit = async (e: React.FormEvent) => { e.preventDefault(); setBusy(true); setErr(""); const res = await fetch(initial ? `${BP}/api/campaigns/${initial.id}` : `${BP}/api/campaigns`, { method: initial ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, description: desc, utm }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Something went wrong."); r.push(`/app/campaigns/${j.campaign.id}`); r.refresh(); };
+  const submit = async (e: React.FormEvent) => { e.preventDefault(); setBusy(true); setErr(""); const res = await fetch(initial ? `${BP}/api/campaigns/${initial.id}` : `${BP}/api/campaigns`, { method: initial ? "PATCH" : "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, description: desc, utm }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Something went wrong."); if (!initial) track(EVENTS.app_campaign_created, { has_utm: Object.values(utm ?? {}).some(Boolean) }); r.push(`/app/campaigns/${j.campaign.id}`); r.refresh(); };
   return <main className="bl-app bl-create"><p><Link href={initial ? `/app/campaigns/${initial.id}` : "/app/campaigns"}>← {initial ? initial.name : "Campaigns"}</Link></p>
     <form className="ids-card bl-new" onSubmit={submit}><h1 className="ids-h2" style={{ fontSize: 26, margin: "0 0 18px" }}>{initial ? "Edit campaign" : "Create a campaign"}</h1>
       <label className="ids-label" htmlFor="cp-name">Name</label><input id="cp-name" className="ids-input" value={name} maxLength={60} required onChange={e => setName(e.target.value)} placeholder="Spring launch" />

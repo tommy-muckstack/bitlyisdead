@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { Confirm, Modal } from "@/components/Modal";
 import { TagInput } from "@/components/TagInput";
 import { hostOf, isLive, plural, type Link as L } from "@/lib/links";
@@ -39,8 +40,8 @@ export function LinksApp({ initial, query }: { initial: L[]; prefill?: string; q
   const filtered = range !== "any" || fTags.length > 0 || kind !== "all" || exp !== "all"; const clear = () => { setRange("any"); setFrom(""); setTo(""); setFTags([]); setKind("all"); setExp("all"); setQ(""); };
   const active = links.filter(l => !l.hidden); const total = active.reduce((n, l) => n + l.stats.clicks, 0);
   const apply = (updated: L[]) => setLinks(ls => ls.map(x => updated.find(u => u.code === x.code) ?? x));
-  const patch = async (codes: string[], body: object) => { setBusy(true); const res = await fetch(`${BP}/api/links/bulk`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ codes, patch: body }) }); setBusy(false); if (res.ok) { apply((await res.json()).links); setSel(new Set()); r.refresh(); } };
-  const del = async (codes: string[]) => { setBusy(true); const res = await fetch(`${BP}/api/links/bulk`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ codes, delete: true }) }); setBusy(false); setConfirmDel(null); if (res.ok) { const { deleted } = await res.json(); setLinks(ls => ls.filter(x => !deleted.includes(x.code))); setSel(new Set()); r.refresh(); } };
+  const patch = async (codes: string[], body: object) => { setBusy(true); const res = await fetch(`${BP}/api/links/bulk`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ codes, patch: body }) }); setBusy(false); if (res.ok) { track(EVENTS.app_link_updated, { fields: Object.keys(body).length, bulk: true, count: codes.length }); apply((await res.json()).links); setSel(new Set()); r.refresh(); } };
+  const del = async (codes: string[]) => { setBusy(true); const res = await fetch(`${BP}/api/links/bulk`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ codes, delete: true }) }); setBusy(false); setConfirmDel(null); if (res.ok) { const { deleted } = await res.json(); track(EVENTS.app_links_deleted, { count: deleted.length }); setLinks(ls => ls.filter(x => !deleted.includes(x.code))); setSel(new Set()); r.refresh(); } };
   const toggle = (code: string) => setSel(s => { const n = new Set(s); if (n.has(code)) n.delete(code); else n.add(code); return n; }); const allSel = shown.length > 0 && shown.every(l => sel.has(l.code));
   return <main className="bl-app bl-links">
     <div className="bl-head"><h1 className="ids-h2" style={{ fontSize: 28, margin: 0 }}>Links <span className="ids-muted" style={{ fontSize: 15, fontWeight: 500 }}>{plural(active.length, "link")} · {plural(total, "click")}</span></h1><Link href="/app/links/new" className="ids-btn ids-btn--primary">Create link</Link></div>

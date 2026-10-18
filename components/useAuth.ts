@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FirebaseClientConfig } from "@/lib/isdead-auth/config";
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, resetPassword, authErrorMessage } from "@/lib/isdead-auth/client";
 import { BP } from "@/lib/basepath";
+import { trackNow, EVENTS } from "@/lib/telemetry";
 
 export function useAuth({ config, demo, to, signup, reset = false }: { config: FirebaseClientConfig | null; demo: boolean; to: string; signup: boolean; reset?: boolean }) {
   const [mode, setMode] = useState<"signin" | "signup" | "reset">(reset ? "reset" : signup ? "signup" : "signin");
@@ -18,9 +19,9 @@ export function useAuth({ config, demo, to, signup, reset = false }: { config: F
     if (!config) { setErr("Sign-in isn't configured on this deployment yet."); return; }
     if (mode === "reset") return run(async () => { await resetPassword(config, email); setNote("If that email has an account, a reset link is on its way. Check your inbox."); });
     if (emailFirst && step === 1) { setStep(2); return; }
-    run(async () => { if (mode === "signup") { await signUpWithEmail(config, session, email, password); window.location.assign(`${BP}/welcome?next=${encodeURIComponent(to)}`); } else { await signInWithEmail(config, session, email, password); window.location.assign(to); } });
+    run(async () => { if (mode === "signup") { await signUpWithEmail(config, session, email, password); await trackNow(EVENTS.app_signed_up, { method: "password" }); window.location.assign(`${BP}/welcome?next=${encodeURIComponent(to)}`); } else { await signInWithEmail(config, session, email, password); await trackNow(EVENTS.app_signed_in, { method: "password" }); window.location.assign(to); } });
   };
-  const google = () => { if (!config) { setErr("Sign-in isn't configured on this deployment yet."); return; } run(async () => { await signInWithGoogle(config, session); window.location.assign(to); }); };
+  const google = () => { if (!config) { setErr("Sign-in isn't configured on this deployment yet."); return; } run(async () => { await signInWithGoogle(config, session); await trackNow(EVENTS.app_signed_in, { method: "google" }); window.location.assign(to); }); };
   const useDemo = async () => { const r = await fetch(`${BP}/api/session/demo`, { method: "POST" }); if (r.ok) window.location.assign(to); };
   const go = (m: "signin" | "signup" | "reset") => (e?: React.MouseEvent) => { e?.preventDefault(); setMode(m); setStep(1); setErr(""); setNote(""); };
   const off = (e: React.MouseEvent) => e.preventDefault();

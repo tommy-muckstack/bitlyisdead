@@ -2,12 +2,14 @@
 // Step 2 of the QR flow and the edit panel on a QR Code's page: presets, pattern, corners, colours, frame + label, logo upload, live preview.
 import { useMemo, useState } from "react";
 import { DEFAULT_STYLE, PRESETS, renderQrSvg, type QrStyle } from "@/lib/qr";
+import { track, EVENTS } from "@/lib/telemetry";
 export function QrPreview({ data, style, size = 240, testId }: { data: string; style: QrStyle; size?: number; testId?: string }) {
   const svg = useMemo(() => renderQrSvg(data || "https://example.com", style, { width: size }), [data, style, size]);
   return <div className="qr-prev" data-testid={testId} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 /** Rasterise the SVG in the browser (PNG/JPEG) or save it as-is (SVG). */
 export async function downloadQr(data: string, style: QrStyle, fmt: "png" | "svg" | "jpeg", name: string) {
+  track(EVENTS.app_qr_downloaded, { format: fmt });
   const svg = renderQrSvg(data, style, { width: 1024 }); const file = `${name.replace(/[^\w-]+/g, "-") || "qr-code"}-qr.${fmt === "jpeg" ? "jpg" : fmt}`;
   const save = (url: string) => { const a = document.createElement("a"); a.href = url; a.download = file; document.body.appendChild(a); a.click(); a.remove(); };
   if (fmt === "svg") { const u = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })); save(u); setTimeout(() => URL.revokeObjectURL(u), 2000); return; }
