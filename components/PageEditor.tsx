@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { CopyButton, useOrigin } from "@/components/LinksApp";
 import { PublicPage } from "@/components/PublicPage";
 import { THEMES, type Block, type PageDoc } from "@/lib/pages-types";
@@ -16,7 +17,7 @@ export function PageEditor({ initial }: { initial: PageDoc }) {
   const blocks = (f: (b: Block[]) => Block[]) => set("blocks", f(p.blocks));
   const add = (type: Block["type"]) => blocks(b => [...b, { id: nid(), type, title: type === "heading" ? "New section" : type === "text" ? "" : "", url: "", clicks: 0 }]);
   const move = (i: number, d: -1 | 1) => blocks(b => { const n = [...b]; const j = i + d; if (j < 0 || j >= n.length) return n; [n[i], n[j]] = [n[j]!, n[i]!]; return n; });
-  const save = async (extra: object = {}) => { setBusy(true); setErr(""); setMsg(""); const res = await fetch(`${BP}/api/pages/${p.id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ title: p.title, bio: p.bio, emoji: p.emoji, theme: p.theme, blocks: p.blocks, slug, ...extra }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Could not save."); setP(j.page); setSlug(j.page.slug); setMsg("Saved"); r.refresh(); };
+  const save = async (extra: object = {}) => { setBusy(true); setErr(""); setMsg(""); const res = await fetch(`${BP}/api/pages/${p.id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ title: p.title, bio: p.bio, emoji: p.emoji, theme: p.theme, blocks: p.blocks, slug, ...extra }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Could not save."); if ("published" in extra) track(EVENTS.app_page_published, { published: !!j.page.published, blocks: j.page.blocks?.length ?? 0 }); setP(j.page); setSlug(j.page.slug); setMsg("Saved"); r.refresh(); };
   const url = `${origin}${BP}/p/${slug}`;
   return <main className="bl-app pe"><p><Link href="/app/pages">← Pages</Link></p>
     <div className="pe-grid"><div className="pe-form">

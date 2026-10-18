@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { BP } from "@/lib/basepath";
+import { trackNow, identify, resetIdentity, EVENTS } from "@/lib/telemetry";
 import "@/app/appshell.css";
 
 export type ShellItem = { label: string; href: string; icon: string; badge?: string; also?: string[] };
@@ -47,7 +48,10 @@ function CreateMenu({ items }: { items: ShellItem[] }) {
   return <div className="as-create" ref={box}><button type="button" className="as-cta" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(o => !o)}><Ic n="plus" s={18} />Create new<Ic n="chevron" s={16} /></button>
     {open && <div role="menu" className="as-menu">{items.map(it => <Link role="menuitem" key={it.label} href={it.href} onClick={() => setOpen(false)}><Ic n={it.icon} s={18} />{it.label}</Link>)}</div>}</div>;
 }
-export function AppShell({ user, cfg, children }: { user: { name: string; email: string; demo: boolean; guest?: boolean }; cfg: ShellCfg; children: React.ReactNode }) {
+export function AppShell({ user, cfg, children }: { user: { id: string; name: string; email: string; demo: boolean; guest?: boolean }; cfg: ShellCfg; children: React.ReactNode }) {
+  // PostHog identity: signed-in Firebase users by uid; guests and the demo account stay anonymous (account_type only).
+  useEffect(() => { identify(user.id, user.guest ? "guest" : user.demo ? "demo" : "firebase"); }, [user.id, user.guest, user.demo]);
+  const signOut = (e: React.FormEvent<HTMLFormElement>) => { const f = e.currentTarget; e.preventDefault(); void trackNow(EVENTS.app_signed_out).then(() => { resetIdentity(); f.submit(); }); };
   const path = usePathname() || "";
   const rel = path.startsWith(BP) ? path.slice(BP.length) || "/" : path;
   const on = (it: ShellItem) => it.href === "/app" ? rel === "/app" : rel === it.href || rel.startsWith(it.href + "/") || (it.also ?? []).some(a => rel.startsWith(a));
@@ -69,7 +73,7 @@ export function AppShell({ user, cfg, children }: { user: { name: string; email:
           {cfg.right?.map(r => <Link key={r.label} href={r.href} className={"as-btn" + (r.solid ? " solid" : "")}>{r.label}</Link>)}
           {user.guest ? <Link href="/login?callbackUrl=/app" className="as-guest" title="You're using BitlyIsDead as a guest. Sign in to keep your links on every device."><span className="as-me">{initial}</span><span>Guest · <u>sign in to keep your work</u></span></Link>
             : <Link href="/app/settings" className="as-me" title={user.demo ? "Demo account" : user.email} aria-label="Account settings">{initial}</Link>}
-          <form method="post" action={`${BP}/api/session/logout`}><button className="as-out">Sign out</button></form>
+          <form method="post" action={`${BP}/api/session/logout`} onSubmit={signOut}><button className="as-out">Sign out</button></form>
         </div>
       </header>
       <div className="as-body">{children}</div>

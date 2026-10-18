@@ -3,13 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { Confirm } from "@/components/Modal";
 import { CopyButton, useOrigin } from "@/components/LinksApp";
 import { plural } from "@/lib/links";
 import type { PageDoc } from "@/lib/pages-types";
 export function PagesList({ initial }: { initial: PageDoc[] }) {
   const origin = useOrigin(); const r = useRouter(); const [rows, setRows] = useState(initial); const [del, setDel] = useState<PageDoc | null>(null); const [busy, setBusy] = useState(false);
-  const create = async () => { setBusy(true); const res = await fetch(`${BP}/api/pages`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ title: "My page" }) }); setBusy(false); if (res.ok) { const { page } = await res.json(); r.push(`/app/pages/${page.id}`); r.refresh(); } };
+  const create = async () => { setBusy(true); const res = await fetch(`${BP}/api/pages`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ title: "My page" }) }); setBusy(false); if (res.ok) { const { page } = await res.json(); track(EVENTS.app_page_created); r.push(`/app/pages/${page.id}`); r.refresh(); } };
   const remove = async (p: PageDoc) => { setDel(null); if ((await fetch(`${BP}/api/pages/${p.id}`, { method: "DELETE" })).ok) { setRows(rs => rs.filter(x => x.id !== p.id)); r.refresh(); } };
   return <main className="bl-app bl-links">
     <div className="bl-head"><h1 className="ids-h2" style={{ fontSize: 28, margin: 0 }}>Pages <span className="ids-muted" style={{ fontSize: 15, fontWeight: 500 }}>{plural(rows.length, "page")} · {plural(rows.reduce((n, p) => n + p.views, 0), "view")}</span></h1><button type="button" className="ids-btn ids-btn--primary" disabled={busy} onClick={create}>Create page</button></div>

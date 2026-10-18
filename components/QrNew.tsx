@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { useOrigin } from "@/components/LinksApp";
 import { QrDesigner } from "@/components/QrDesigner";
 import { UtmBuilder, applyUtm, emptyUtm } from "@/components/UtmBuilder";
@@ -12,7 +13,7 @@ import type { Link as L } from "@/lib/links";
 export function QrNew({ link, prefill }: { link: L | null; prefill?: string }) {
   const r = useRouter(); const origin = useOrigin(); const [step, setStep] = useState<1 | 2>(link ? 2 : 1); const [url, setUrl] = useState(prefill ?? ""); const [title, setTitle] = useState(link?.title ?? ""); const [back, setBack] = useState(""); const [utm, setUtm] = useState(emptyUtm()); const [style, setStyle] = useState<QrStyle>(DEFAULT_STYLE); const [err, setErr] = useState(""); const [busy, setBusy] = useState(false);
   const code = link?.code ?? "preview"; const data = `${origin}${BP}/s/${code}?r=qr`;
-  const create = async () => { setBusy(true); setErr(""); const res = await fetch(`${BP}/api/qrcodes`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(link ? { code: link.code, title, style } : { url: applyUtm(url, utm), title, backHalf: back, style }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Something went wrong."); r.push(`/app/qr/${j.qr.id}?created=1`); r.refresh(); };
+  const create = async () => { setBusy(true); setErr(""); const res = await fetch(`${BP}/api/qrcodes`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(link ? { code: link.code, title, style } : { url: applyUtm(url, utm), title, backHalf: back, style }) }); const j = await res.json().catch(() => ({})); setBusy(false); if (!res.ok) return setErr(j.error ?? "Something went wrong."); track(EVENTS.app_qr_created, { from_link: !!link, styled: JSON.stringify(style) !== JSON.stringify(DEFAULT_STYLE) }); r.push(`/app/qr/${j.qr.id}?created=1`); r.refresh(); };
   return <main className="bl-app bl-create" style={{ maxWidth: step === 2 ? 1040 : 760 }}><p><Link href={link ? `/app/l/${link.code}` : "/app/qr"}>← {link ? "Link details" : "QR Codes"}</Link></p>
     <div className="ids-card bl-new"><h1 className="ids-h2" style={{ fontSize: 26, margin: "0 0 4px" }}>{step === 1 ? "Create a QR Code" : "Design your code"}</h1><p className="ids-muted" style={{ margin: "0 0 18px" }}>Step {step} of 2 · {step === 1 ? "Where should it send people?" : "Customize the look, then create it."}</p>
       {step === 1 ? <form onSubmit={e => { e.preventDefault(); if (url.trim()) setStep(2); }}>

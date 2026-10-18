@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/telemetry";
 import { Confirm } from "@/components/Modal";
 import { CopyButton } from "@/components/LinksApp";
 import type { FirebaseClientConfig } from "@/lib/isdead-auth/config";
@@ -39,7 +40,7 @@ export function SecuritySettings({ user, config }: { user: SessionUser; config: 
 }
 export function ApiSettings({ user, initial }: { user: SessionUser; initial: Tok[] }) {
   const [rows, setRows] = useState(initial); const [name, setName] = useState(""); const [fresh, setFresh] = useState<string | null>(null); const [err, setErr] = useState(""); const [del, setDel] = useState<Tok | null>(null);
-  const mint = async (e: React.FormEvent) => { e.preventDefault(); setErr(""); const res = await fetch(`${BP}/api/tokens`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name }) }); const j = await res.json().catch(() => ({})); if (!res.ok) return setErr(j.error ?? "Could not create a token."); setFresh(j.token); setRows(rs => [j.doc, ...rs]); setName(""); };
+  const mint = async (e: React.FormEvent) => { e.preventDefault(); setErr(""); const res = await fetch(`${BP}/api/tokens`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name }) }); const j = await res.json().catch(() => ({})); if (!res.ok) return setErr(j.error ?? "Could not create a token."); track(EVENTS.app_api_token_created); setFresh(j.token); setRows(rs => [j.doc, ...rs]); setName(""); };
   const revoke = async (t: Tok) => { setDel(null); if ((await fetch(`${BP}/api/tokens/${t.id}`, { method: "DELETE" })).ok) setRows(rs => rs.filter(x => x.id !== t.id)); };
   return <SettingsShell title="API access">{user.guest || user.demo ? <NeedAccount what="Creating API tokens" /> : <>
     <p className="ids-muted" style={{ margin: "0 0 12px" }}>Create, list and edit links, QR Codes, Pages and Campaigns from your own code. Send the token as <code>Authorization: Bearer …</code>. <Link href="/developers">Read the API docs</Link>.</p>
