@@ -15,7 +15,7 @@ export function ShortenBox() {
       <label htmlFor="bz-url">{tab === "link" ? "Paste your long link here" : "Enter your QR Code destination"}</label>
       <input id="bz-url" value={u} onChange={e => setU(e.target.value)} placeholder="https://example.com/my-long-url" />
       <Link className="bz-track" href={dest} onClick={() => track(EVENTS.landing_cta_clicked, { target: "add_tracking" })}>Add tracking to your link</Link>
-      <div className="bz-row"><button className="bz-blue">{tab === "link" ? "Get your link for free" : "Get your QR Code for free"}<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg></button><span className="bz-rate"><i>G</i><b>★★★★★ 4.5/5</b><small>Loved by 900+ on G2</small></span></div>
+      <div className="bz-row"><button className="bz-blue">{tab === "link" ? "Get your link for free" : "Get your QR Code for free"}<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg></button><span className="bz-rate"><i>✓</i><b>Free and open source</b><small>Apache-2.0 on GitHub</small></span></div>
     </form>
   </div>;
 }
