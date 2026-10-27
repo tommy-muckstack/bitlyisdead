@@ -31,7 +31,7 @@ export function Landing({ page }: { page?: "pricing" } = {}) {
       <h1>Understand what clicks with your audience</h1>
       <p className="bz-lede">Create, share, and track short links and QR Codes with an open-source tool. Find what’s resonating and scale it into bigger reach, more clicks, and more sales.</p>
       <ShortenBox />
-      <div className="bz-plan"><span>Sign up for free. Your free plan includes:</span><ul><li><Chk />5 short links/month</li><li><Chk />3 custom back-halves/month</li><li><Chk />Unlimited link clicks</li></ul></div>
+      <div className="bz-plan"><span>Sign up for free. Every account includes:</span><ul><li><Chk />300 short links, no monthly cap</li><li><Chk />Custom back-halves</li><li><Chk />Unlimited link clicks</li></ul></div>
       <div className="bz-brands">{brands.map(b => <span key={b}>{b}</span>)}</div>
     </section>
 
